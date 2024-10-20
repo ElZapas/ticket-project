@@ -1,9 +1,15 @@
 import FormComponent from '../components/FormComponent'
+import './css/Login.css';
+
 export default function Login() {
+
   return (
     <>
-    <h1>Iniciar Sesion</h1>
-    <FormComponent/>
+      <div className='container-login' >
+
+        <FormComponent/>
+      
+      </div>
     </> 
   )
 }

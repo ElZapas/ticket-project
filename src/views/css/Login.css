@@ -1,1 +1,78 @@
 /* Pues lo mismo pero para el componente/vista login :) */
+
+.container-login {
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to bottom, #152D8D 40%, #628ED1 100%);
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-form-login {
+    background-color: #D9D9D9;    
+    max-width: 320px;
+    min-width: 280px;
+    height: 500px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container-form-login .titulo-login {
+    font-size: 28px;
+    font-weight: 700;
+    color: black;
+}
+
+.container-form-login .contenedor-inputs {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0 10% 5% 10%;
+}
+
+.contenedor-inputs .etiqueta-input {
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+    text-align: start;
+    margin: 0;
+}
+
+.contenedor-inputs .etiqueta-recuperar {
+    font-size: 12px;
+    margin: 0px;
+    text-align: end;
+    color: #55575f;
+}
+
+
+.contenedor-inputs .input-login-estilo {
+    font-size: 12px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    outline:none;
+}
+
+
+.container-form-login .btn-ingresar {
+    background-color: #152D8D;
+    border-radius: 10px;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10% 0;
+    box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+
+.container-form-login .btn-ingresar:hover {
+    transform: translateY(-5px); /* Subir 5px hacia arriba */
+    border: none;
+
+}
