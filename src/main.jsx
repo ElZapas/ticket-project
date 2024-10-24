@@ -29,8 +29,8 @@ const router = createBrowserRouter([
 // usando las rutas en el render
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AppProvider>  {/* Aquí envolvemos todo con el contexto global */}
-      <RouterProvider router={router} />
-    </AppProvider>
-  </StrictMode>
-);
+  <AppProvider> 
+    <RouterProvider router={router} />
+  </AppProvider>
+</StrictMode>
+)

@@ -39,7 +39,8 @@ export default function Home() {
     <>
       <h1>Home</h1>
       <Link to="/">Acceder</Link>
-      {user ? <p>Hola, {user.name}</p> : <p>Usuario no registrado, Debe iniciar sesion.</p>}
+      {user ? <p>Hola, {user.name}</p> : <p>Usuario no registrado, Debe iniciar sesion.</p>} 
     </>
+    // Ternaria que hace saber si hemos iniciado sesion en el sistema 
   );
 }
