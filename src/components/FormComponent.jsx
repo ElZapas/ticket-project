@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import '../views/css/Login.css';
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../contexts/useApp";
 
 export default function FormComponent() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {setUser} = useApp();
   const [rememberMe, setRememberMe] = useState(false);  // Estado para 'remember me'
   const { login, loading, error, setError, setLoading} = useAuth();  // Usa el hook
 
@@ -14,8 +16,9 @@ export default function FormComponent() {
   const handleOnSubmit = async (event) => {
     event.preventDefault();
     try{
-      await login(email, password, rememberMe);
-      navigate('/Home')
+      const data = await login(email, password, rememberMe); //recolecta lo que devuelve la funcion login
+      setUser(data.user) //asignacion de datos en un componente
+      navigate('/home')
     }
     catch(err){
       setError(err)
