@@ -22,13 +22,13 @@ const router = createBrowserRouter([
         element: <Home /> // Ruta para la vista Home
       },
       {
-        path: '',
-        element: <Login /> // Ruta predeterminada (Login)
+        path: '/list_ticket',
+        element: <ListadoTickets/> // Ruta para Listado de Tickets
       },
       {
-        path: '/list_ticket',
-        element: <ListadoTickets /> // Ruta para Listado de Tickets
-      }
+        path: '',
+        element: <Login /> // Ruta predeterminada (Login)
+      }  
     ]
   }
 ]);

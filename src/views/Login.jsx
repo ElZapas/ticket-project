@@ -42,14 +42,7 @@ export default function Login() {
   return (
     <>
       <div className='container-login' >
-<<<<<<< HEAD
-
-        
-        <FormComponent/>
-      
-=======
         <FormComponent />
->>>>>>> e7360ca2b42847b4139050567b11b56f341b2887
       </div>
     </>
   )
