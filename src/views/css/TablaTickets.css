@@ -1,0 +1,70 @@
+.table-container {
+    width: 90%;
+    margin: 20px auto;
+   
+    padding: 20px;
+    border-radius: 8px;
+    
+   
+  }
+
+.contenedor1-listado { 
+  background-color: #f5f5f5;
+  background: linear-gradient(to bottom, #152D8D 40%,  100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 40px;
+  border-radius: 20px;
+}
+  
+.tabla-estilo {
+ 
+
+
+}
+  
+  .tabla-contenedor {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .filters input, .filters select, .filters button {
+    padding: 10px;
+    margin: 0 5px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+      border-bottom: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: none;
+    color: black;
+    font-weight: 600;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+  }
+  

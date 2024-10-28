@@ -1,16 +1,17 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './layouts/Layout'
+//import Layout from './layouts/Layout'
 import Login from './views/Login'
 import Home from './views/Home'
-import Register from './views/Register'
+//import Register from './views/Register'
+import ListadoTickets from './views/ListadoTickets'
 import './index.css'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout/>,
+    element: '',
     children: [
       {
         path: '/login',
@@ -21,8 +22,8 @@ const router = createBrowserRouter([
         element: <Home />
       }, 
       {
-        path: '/register',
-        element: <Register/>
+        path: '/list_ticket',
+        element: <ListadoTickets/>
       }
     ]
   }
