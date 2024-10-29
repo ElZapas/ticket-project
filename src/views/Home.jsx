@@ -6,7 +6,6 @@ import { environments } from '../environments';
 
 export default function Home() {
   useAuthGuard() //verifica redirecciones
-
   const { user, setUser } = useApp();  // Usamos el contexto global para el estado del usuario
   const getUserData = async (token) => {
     try {

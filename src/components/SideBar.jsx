@@ -2,8 +2,6 @@ import { useState } from 'react';
 import '../views/css/Sidebar.css'; // Asegúrate de tener los estilos
 import TablaTickets from './TablaTickets'
 
-
-
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 

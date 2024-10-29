@@ -10,27 +10,33 @@ import ListadoTickets from './views/ListadoTickets'; // Vista para Listado de Ti
 
 import './index.css'; // Estilos globales
 import { AppProvider } from './contexts/AppContext'; // Contexto global de la app
+import PageNotFound from './views/PageNotFound';
 
 // Estructura de rutas
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: 'admin',
     element: <Layout />, // Usamos el Layout como contenedor principal
     children: [
       {
-        path: '/home',
+        path: 'home',
         element: <Home /> // Ruta para la vista Home
       },
       {
-        path: '/list_ticket',
-        element: <ListadoTickets/> // Ruta para Listado de Tickets
+        path: 'list-ticket',
+        element: <ListadoTickets /> // Ruta para Listado de Tickets
       },
-      {
-        path: '',
-        element: <Login /> // Ruta predeterminada (Login)
-      }  
     ]
+  }, 
+  {
+    path: '',
+    element: <Login /> // Ruta predeterminada (Login)
+  },
+  {
+    path: '*',
+    element: <PageNotFound/> 
   }
+  
 ]);
 
 // Render de la aplicación con RouterProvider y AppProvider

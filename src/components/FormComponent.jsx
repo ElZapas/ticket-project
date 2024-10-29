@@ -18,7 +18,7 @@ export default function FormComponent() {
     try{
       const data = await login(email, password, rememberMe); //recolecta lo que devuelve la funcion login
       setUser(data.user) //asignacion de datos en un componente
-      navigate('/home')
+      navigate('/admin/list-ticket')
     }
     catch(err){
       setError(err)

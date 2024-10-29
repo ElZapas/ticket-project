@@ -20,7 +20,7 @@ export default function Login() {
       });
       const data = await response.json();
       setUser(data);  // Guardamos el usuario en el contexto global
-      navigate('/home')
+      navigate('/admin/home')
     } catch (error) {
       console.log(error);
     }

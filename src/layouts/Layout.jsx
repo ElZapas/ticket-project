@@ -1,11 +1,14 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import '../App.css'
+import '../views/css/Sidebar.css'; // Asegúrate de tener los estilos, gracias.
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../contexts/useApp';
+import { useState } from 'react';
 
 export default function Layout() {
   const { user, setUser } = useApp()
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   const { logout } = useAuth() // 1. importar todos los hooks al logout
   const onLogout = () => {
     // 2. funciones logicas
@@ -13,12 +16,45 @@ export default function Layout() {
     setUser(undefined)
     navigate('/')
   }
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  }
   return (
     <>
-      <nav>
-        <Link to="/home">home</Link>
-        {!!user && <button onClick={onLogout}>cerrar sesion</button>}
-      </nav>
+      <div className="App">
+        {/* Navbar con ícono de menú */}
+        <nav className="navbar">
+          <div className="menu-icon" onClick={toggleSidebar}>
+            {isOpen ? <p> ☰ </p> : <p> ☰ </p>}
+
+            <div>
+              <img src="\src\assets\img\millev.png" />
+            </div>
+
+          </div>
+
+          <div className='usuario-info'>
+            {user ? <p className='navbar-title'>Usuario: {user.name}</p> : <p>Usuario no registrado</p>}
+            {!!user && <button onClick={onLogout}>cerrar sesion</button>}
+          </div>
+
+        </nav>
+
+        {/* Sidebar */}
+        <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+
+
+          <a href="#" onClick={toggleSidebar} className="close-btn"> X </a>
+
+          <a href="#">Tecnicos</a>
+          <a href="#">Tickets</a>
+
+        </div>
+
+        {/* Contenido Principal */}
+        <div className={`content ${isOpen ? 'shrink' : ''}`}>
+        </div>
+      </div>
       <Outlet />
     </>
   )
