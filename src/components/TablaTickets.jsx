@@ -9,7 +9,7 @@ import ModalAgregarTicket from './Modals/ModalAgregarTicket'
 
 const TablaTickets = () => {
   
-  const data = Array(20).fill({
+  const data = Array(10).fill({
     idTicket: 'T001',
     idCliente: 'C001',
     idUsuario: 'U001',
