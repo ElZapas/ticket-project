@@ -1,36 +1,49 @@
-//COMPONENTE PRINCIPAL, AQUI SE ASIGNAN RUTAS QUE SE IRAN TRABAJANDO A LO LARGO DEL PROYECTO
-import { StrictMode } from 'react' // importacion de strictMode, para comprobar errores de depuracion
-import { createRoot } from 'react-dom/client' // Creacion de rutas usando el hook de React
-import { createBrowserRouter, RouterProvider } from 'react-router-dom' // Router provider, para usar rutas
-//importaciones de componentes a rutas
-import Layout from './layouts/Layout'
-import Login from './views/Login'
-import Home from './views/Home'
-import './index.css'
-import { AppProvider } from './contexts/AppContext'
+import { StrictMode } from 'react'; // Importación del modo estricto para detección de errores
+import { createRoot } from 'react-dom/client'; // Hook de React para renderizar la aplicación
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'; // React Router
 
-// Estructura de rutas, a lo largo que se agregan mas vistas se van a ingresar aqui para ser vistas
+// Importaciones de vistas y componentes
+import Layout from './layouts/Layout'; // Layout para las rutas principales
+import Login from './views/Login'; // Vista Login
+import Home from './views/Home'; // Vista Home
+import ListadoTickets from './views/ListadoTickets'; // Vista para Listado de Tickets
+
+import './index.css'; // Estilos globales
+import { AppProvider } from './contexts/AppContext'; // Contexto global de la app
+import PageNotFound from './views/PageNotFound';
+
+// Estructura de rutas
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Layout/>,
+    path: 'admin',
+    element: <Layout />, // Usamos el Layout como contenedor principal
     children: [
       {
-        path: '/home',
-        element: <Home/>
+        path: 'home',
+        element: <Home /> // Ruta para la vista Home
       },
       {
-        path: '',
-        element: <Login/>
-      }
+        path: 'list-ticket',
+        element: <ListadoTickets /> // Ruta para Listado de Tickets
+      },
     ]
+  }, 
+  {
+    path: '',
+    element: <Login /> // Ruta predeterminada (Login)
+  },
+  {
+    path: '*',
+    element: <PageNotFound/> 
   }
-])
-// usando las rutas en el render
+  
+]);
+
+// Render de la aplicación con RouterProvider y AppProvider
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <AppProvider> 
-    <RouterProvider router={router} />
-  </AppProvider>
-</StrictMode>
-)
+    <AppProvider>
+      <RouterProvider router={router} />
+    </AppProvider>
+  </StrictMode>
+);

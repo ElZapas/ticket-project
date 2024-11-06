@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect } from "react"
+import { useApp } from "../../contexts/useApp"
 import { useNavigate } from "react-router-dom";
 
-export default function useAuthGuard() {
-    const localToken = localStorage.getItem('token');
-    const sessionToken = sessionStorage.getItem('token');
+export default function useAuthGuard(path) {
     const navigate = useNavigate();
-
+    const { user } = useApp()
     useEffect(() => {
-        if (!localToken && !sessionToken) {
-            navigate('/')
+        console.log(user);
+        
+        if (user !== undefined) {
+            navigate(path)
         }
-    }, [])
+    }, [user])
 }
