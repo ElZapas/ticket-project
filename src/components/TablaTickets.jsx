@@ -11,8 +11,8 @@ const TablaTickets = () => {
   
   const data = Array(10).fill({
     idTicket: 'T001',
-    idCliente: 'C001',
-    idUsuario: 'U001',
+    nombreCliente: 'C001',
+    nombreUsuario: 'U001',
     descripcion: 'Descripcion breve de la observación',
     fechaRecepcion: '05/11/24',
     estado: 'Abierto',
@@ -79,8 +79,8 @@ const TablaTickets = () => {
             {data.map((ticket, index) => (
               <TableRow key={index}>
                 <TableCell>{ticket.idTicket}</TableCell>
-                <TableCell>{ticket.idCliente}</TableCell>
-                <TableCell>{ticket.idUsuario}</TableCell>
+                <TableCell>{ticket.nombreCliente}</TableCell>
+                <TableCell>{ticket.nombreUsuario}</TableCell>
                 <TableCell>{ticket.descripcion}</TableCell>
                 <TableCell>{ticket.fechaRecepcion}</TableCell>
                 <TableCell>{ticket.estado}</TableCell>
