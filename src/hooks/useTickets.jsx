@@ -1,4 +1,4 @@
-// src/hooks/useTickets.js
+// Hook personalizado para listar tickets
 import { useState, useEffect } from 'react';
 import { environments } from '../environments';
 
