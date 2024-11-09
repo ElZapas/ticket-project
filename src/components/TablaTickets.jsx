@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, TextField, Select, MenuItem, Typography, Box 
+  Paper, Button, TextField, Select, MenuItem,Modal, Typography, Box 
 } from '@mui/material';
 import ModalEditar from './Modals/ModalEditar';
 import ModalAgregarTicket from './Modals/ModalAgregarTicket';
@@ -23,6 +23,14 @@ const TablaTickets = () => {
   const filteredTickets = tickets.filter(ticket =>
     ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+  const handleCloseDeleteModal = () => setOpenDeleteModal(false);
+
+  const handleDelete = () => {
+    console.log("Ticket eliminado");
+    handleCloseDeleteModal(); // Cierra el modal después de eliminar
+  };
 
   return (
     <Box sx={{ marginLeft: 4 , marginRight: 4 }}>
@@ -80,9 +88,65 @@ const TablaTickets = () => {
                 <TableCell>{ticket.canalRecepcion}</TableCell>
                 <TableCell>{ticket.fechaResolucion || 'Pendiente'}</TableCell>
                 <TableCell>
-                  <Button variant="contained" color="warning" size="small" onClick={handleOpenEdit}>
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    size="small"
+                    onClick={handleOpenEdit}
+                  >
                     Editar
                   </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    onClick={handleDelete}
+                    style={{ marginLeft: '8px' }} // Espacio entre los botones
+                  >
+                    Eliminar
+                  </Button>
+                    <Modal
+                      open={openDeleteModal}
+                      onClose={handleCloseDeleteModal}
+                      aria-labelledby="modal-title"
+                      aria-describedby="modal-description"
+                    >
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          width: 300,
+                          bgcolor: 'background.paper',
+                          borderRadius: '8px',
+                          boxShadow: 24,
+                          p: 4,
+                          textAlign: 'center'
+                        }}
+                      >
+                        <Typography id="modal-title" variant="h6" component="h2">
+                          Estas seguro de eliminar este ticket?
+                        </Typography>
+                        <Typography id="modal-description" sx={{ mt: 2 }}>
+                          ¿Estás seguro de que deseas eliminar este ticket?
+                        </Typography>
+                        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+                          <Button variant="contained" color="error" onClick={handleDelete}>
+                            Sí, eliminar
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleCloseDeleteModal}
+                            sx={{ ml: 2 }}
+                          >
+                            Cancelar
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Modal>
+
                 </TableCell>
               </TableRow>
             ))}

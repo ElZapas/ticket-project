@@ -11,6 +11,7 @@ import ListadoTickets from './views/ListadoTickets'; // Vista para Listado de Ti
 import './index.css'; // Estilos globales
 import { AppProvider } from './contexts/AppContext'; // Contexto global de la app
 import PageNotFound from './views/PageNotFound';
+import ListadoTecnicos from './views/ListadoTecnicos';
 
 // Estructura de rutas
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: 'list-ticket',
         element: <ListadoTickets /> // Ruta para Listado de Tickets
+      },
+      {
+        path: 'list-tecnicos',
+        element: <ListadoTecnicos /> // Ruta para Listado de Tickets
       },
     ]
   }, 
