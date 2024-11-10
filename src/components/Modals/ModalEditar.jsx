@@ -1,5 +1,4 @@
 // ModalComponent.js
-import React from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const ModalEditar = ({ open, handleClose, ticketData }) => {
@@ -44,9 +43,8 @@ const ModalEditar = ({ open, handleClose, ticketData }) => {
         </Typography>
 
         {/* Campos del formulario */}
-        <TextField label="ID Ticket" variant="outlined" fullWidth margin="normal" defaultValue={ticketData?.idTicket || ''} />
-        <TextField label="ID Cliente" variant="outlined" fullWidth margin="normal" defaultValue={ticketData?.idCliente || ''} />
-        <TextField label="ID Usuario" variant="outlined" fullWidth margin="normal" defaultValue={ticketData?.idUsuario || ''} />
+        <TextField label="Nombre Cliente" variant="outlined" fullWidth margin="normal" defaultValue={ticketData?.idCliente || ''} />
+        <TextField label="Nombre usuario" variant="outlined" fullWidth margin="normal" defaultValue={ticketData?.idUsuario || ''} />
         <TextField label="Descripción" variant="outlined" fullWidth margin="normal" multiline rows={3} defaultValue={ticketData?.descripcion || ''} />
         <TextField label="Fecha de Recepción" variant="outlined" fullWidth margin="normal" type="date" InputLabelProps={{ shrink: true }} defaultValue={ticketData?.fechaRecepcion || ''} />
         <TextField label="Estado" variant="outlined" fullWidth margin="normal" defaultValue={ticketData?.estado || ''} />
