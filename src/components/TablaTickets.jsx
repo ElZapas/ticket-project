@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, TextField, Select, MenuItem, Typography, Box 
+  Paper, Button, TextField, Select, MenuItem, Modal, Typography, Box 
 } from '@mui/material';
 import ModalEditar from './Modals/ModalEditar';
 import ModalAgregarTicket from './Modals/ModalAgregarTicket';
@@ -23,6 +23,14 @@ const TablaTickets = () => {
   const filteredTickets = tickets.filter(ticket =>
     ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+  const handleCloseDeleteModal = () => setOpenDeleteModal(false);
+
+  const handleDelete = () => {
+    console.log("Ticket eliminado");
+    handleCloseDeleteModal(); // Cierra el modal después de eliminar
+  };
 
   return (
     user ? (  // Verificación para asegurarse de que `user` esté definido

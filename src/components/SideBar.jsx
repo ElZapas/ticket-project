@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import '../views/css/Sidebar.css'; // Asegúrate de tener los estilos
 import TablaTickets from './TablaTickets'
+import { Link } from 'react-router-dom';
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,8 +38,8 @@ const Sidebar = () => {
            
             <a href="#" onClick={toggleSidebar} className="close-btn"> X </a>
        
-        <a href="#">Tecnicos</a>
-        <a href="#">Tickets</a>
+            <Link to="/admin/list-tecnicos">Técnicos</Link>
+            <Link to="/admin/list-ticket">Tickets</Link>
         
       </div>
 
