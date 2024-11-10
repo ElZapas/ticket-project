@@ -28,7 +28,7 @@ export default function Layout() {
             {isOpen ? <p> ☰ </p> : <p> ☰ </p>}
 
             <div>
-              <img src="\src\assets\img\millev.png" />
+              <img src="/img/millev.png" />
             </div>
 
           </div>
