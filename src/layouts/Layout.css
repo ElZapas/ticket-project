@@ -40,6 +40,7 @@
   
 
   .sidebar {
+    z-index: 5;
     width: 250px;
     height: 100%;
     background-color: #E5E5E5    ;
@@ -61,7 +62,10 @@
    
   }
   
-
+  .boton-cerrar-sesion{
+    background-color: #1976d2;
+    color: #ffffff;
+  }
   
   .sidebar.open {
     left: 0;

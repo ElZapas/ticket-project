@@ -35,7 +35,7 @@ export default function Layout() {
 
           <div className='usuario-info'>
             {user ? <p className='navbar-title'>Usuario: {user.nombreUsuario}</p> : <p>Usuario no registrado</p>}
-            {!!user && <button onClick={onLogout}>cerrar sesion</button>}
+            {!!user && <button className='boton-cerrar-sesion' onClick={onLogout}>cerrar sesion</button>}
           </div>
 
         </nav>
