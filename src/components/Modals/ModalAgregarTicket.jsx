@@ -1,5 +1,4 @@
 // ModalComponent.js
-import React from 'react';
 import { Modal, Box, Typography, TextField, Button, MenuItem } from '@mui/material';
 
 const ModalAgregarTicket = ({ open, handleClose }) => {

@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import '../App.css'
 import '../views/css/Sidebar.css'; // Asegúrate de tener los estilos, gracias.
 import { useAuth } from '../hooks/useAuth';
@@ -46,8 +46,8 @@ export default function Layout() {
 
           <a href="#" onClick={toggleSidebar} className="close-btn"> X </a>
 
-          <a href="#">Tecnicos</a>
-          <a href="#">Tickets</a>
+          <Link to="/admin/list-tecnicos">Técnicos</Link>
+          <Link to="/admin/list-ticket">Tickets</Link>
 
         </div>
 
