@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import '../App.css'
-import '../views/css/Sidebar.css'; // Asegúrate de tener los estilos, gracias.
+import './Layout.css'; // Asegúrate de tener los estilos, gracias.
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../contexts/useApp';
 import { useState } from 'react';
@@ -28,14 +28,14 @@ export default function Layout() {
             {isOpen ? <p> ☰ </p> : <p> ☰ </p>}
 
             <div>
-              <img src="\src\assets\img\millev.png" />
+              <img src="/img/millev.png" />
             </div>
 
           </div>
 
           <div className='usuario-info'>
             {user ? <p className='navbar-title'>Usuario: {user.nombreUsuario}</p> : <p>Usuario no registrado</p>}
-            {!!user && <button onClick={onLogout}>cerrar sesion</button>}
+            {!!user && <button className='boton-cerrar-sesion' onClick={onLogout}>cerrar sesion</button>}
           </div>
 
         </nav>
