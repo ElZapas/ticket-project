@@ -40,7 +40,6 @@ export default function FormComponent() {
           <div className="contenedor-inputs">
             <p className="etiqueta-input">Ingresar contraseña</p>
             <input className="input-login-estilo" value={password} placeholder="Contraseña" onChange={(event) => setPassword(event.target.value)} type="password" id="password" />
-            <a className="etiqueta-recuperar">Recuperar contraseña</a>
           </div>
 
           <div className="contenedor-checkbox">
