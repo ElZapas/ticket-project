@@ -119,10 +119,14 @@ const TablaTickets = () => {
                     )}
                   </TableCell>
                   <TableCell>
-                    {user.puesto === 'responsable' && (
+                    {user.puesto === 'responsable' ? (
                       <Button variant="contained" color="error" size="small" onClick={() => handleOpenDeleteModal(ticket)}>
                         Eliminar
                       </Button>
+                    ) : (
+                      <Typography variant="body2" color="textSecondary">
+                        Los técnicos no pueden eliminar
+                      </Typography>
                     )}
                   </TableCell>
                 </TableRow>

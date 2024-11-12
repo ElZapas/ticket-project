@@ -48,5 +48,5 @@ export default function useToken() {
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
   }
-  return{isTokenValid, getUserDataFromToken, hastoken, clearToken}
+  return{getToken, isTokenValid, getUserDataFromToken, hastoken, clearToken}
 }
