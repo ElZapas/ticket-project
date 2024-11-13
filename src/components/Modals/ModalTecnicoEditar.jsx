@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const ModalTecnicoEditar = ({ open, onClose, tecnico, onSave }) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useApp } from "../contexts/useApp"; // Accedemos al contexto global de usuario
 import { environments } from "../environments";
 import useToken from "../hooks/useToken"; // Importar el hook useToken
@@ -74,9 +74,5 @@ export const useTicketsFiltrados = () => {
     [tickets, user] // Cambiar solo si `tickets` o `user` cambian
   );
 
-  useEffect(() => {
-    fetchTickets(); // Ejecutar fetchTickets cuando el efecto se monte
-  }, [fetchTickets]);
-
-  return { tickets, filteredTickets, filterTickets, loading, error, fetchTickets };
+  return { tickets, filteredTickets, filterTickets, loading, error, fetchTickets, setTickets};
 };
