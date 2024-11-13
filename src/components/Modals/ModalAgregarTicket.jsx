@@ -44,17 +44,9 @@ const ModalAgregarTicket = ({ open, handleClose }) => {
           Agregar Nuevo Ticket
         </Typography>
         
-        {/* ID Ticket */}
-        <TextField
-          label="ID Ticket"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-        
         {/* ID Cliente */}
         <TextField
-          label="ID Cliente"
+          label="Nombre cliente"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -62,7 +54,7 @@ const ModalAgregarTicket = ({ open, handleClose }) => {
         
         {/* ID Usuario */}
         <TextField
-          label="ID Usuario"
+          label="Nombre usuario"
           variant="outlined"
           fullWidth
           margin="normal"
