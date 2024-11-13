@@ -1,21 +1,22 @@
-import { useState } from 'react';
-import { 
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, TextField, Select, MenuItem, Modal, Typography, Box 
-} from '@mui/material';
-import ModalEditar from './Modals/ModalEditar';
-import ModalAgregarTicket from './Modals/ModalAgregarTicket';
-import useTickets from '../hooks/useTickets';
+import { useState, useEffect } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Typography, Box } from '@mui/material';
+import FormularioTicket from './FormularioTicket'; // Componente reutilizable para agregar/editar
+import { useTicketsFiltrados } from '../hooks/useTicketsFiltrados';
+import { useTicketAcciones } from '../hooks/useTicketAcciones'; // Importamos el hook de acciones
 import { useApp } from '../contexts/useApp';
 
 const TablaTickets = () => {
-  const { tickets } = useTickets();
+  const { tickets, fetchTickets } = useTicketsFiltrados();
   const { user } = useApp();
-  const [openModalEditar, setOpenModalEditar] = useState(false);
-  const [openModalAgregarTicket, setOpenModalAgregarTicket] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false); // Estado para el modal de eliminar
-  const [selectedTicket, setSelectedTicket] = useState(null); // Estado para el ticket seleccionado
+  const { deleteTicket, updateTicket } = useTicketAcciones(); // Acciones para eliminar y editar
+  const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    fetchTickets(); // Cargar tickets al montar el componente
+  }, [fetchTickets]);
 
   const style = {
     position: 'absolute',
@@ -26,24 +27,41 @@ const TablaTickets = () => {
     boxShadow: 24,
     borderRadius: 2,
   };
-  
-  const handleOpenEdit = () => setOpenModalEditar(true);
-  const handleCloseEdit = () => setOpenModalEditar(false);
-  const handleOpenAgregar = () => setOpenModalAgregarTicket(true);
-  const handleCloseAgregar = () => setOpenModalAgregarTicket(false);
+
+  const handleOpenModal = (ticket = null) => {
+    setSelectedTicket(ticket);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTicket(null);
+    setOpenModal(false);
+  };
 
   const handleOpenDeleteModal = (ticket) => {
-    setSelectedTicket(ticket); // Guarda el ticket seleccionado para eliminar
+    setSelectedTicket(ticket);
     setOpenDeleteModal(true);
   };
+
   const handleCloseDeleteModal = () => {
     setSelectedTicket(null);
     setOpenDeleteModal(false);
   };
 
+  const handleTicketSubmit = (ticketData) => {
+    if (selectedTicket) {
+      updateTicket(selectedTicket.idTicket, ticketData); // Usamos la acción de actualizar
+    } else {
+      console.log('Agregar ticket:', ticketData);
+    }
+    handleCloseModal();
+  };
+
   const handleDelete = () => {
-    console.log(`Ticket eliminado: ${selectedTicket.idTicket}`);
-    handleCloseDeleteModal(); // Cierra el modal después de eliminar
+    if (selectedTicket) {
+      deleteTicket(selectedTicket.idTicket); // Usamos la acción de eliminar
+    }
+    handleCloseDeleteModal();
   };
 
   const filteredTickets = tickets.filter(ticket =>
@@ -57,7 +75,7 @@ const TablaTickets = () => {
           <Typography variant="h4" gutterBottom>
             Listado de Tickets
           </Typography>
-          
+
           <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
             <TextField 
               label="Buscar Técnico" 
@@ -66,12 +84,8 @@ const TablaTickets = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Select defaultValue="abierto" size="small">
-              <MenuItem value="abierto">Abierto</MenuItem>
-              <MenuItem value="cerrado">Cerrado</MenuItem>
-            </Select>
             {user.puesto === 'responsable' && (
-              <Button variant="contained" color="primary" onClick={handleOpenAgregar}>
+              <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
                 Agregar
               </Button>
             )}
@@ -109,12 +123,12 @@ const TablaTickets = () => {
                   <TableCell>{ticket.fechaResolucion || 'Pendiente'}</TableCell>
                   <TableCell>
                     {user.puesto === 'responsable' ? (
-                      <Button variant="contained" color="warning" size="small" onClick={handleOpenEdit}>
+                      <Button variant="contained" color="warning" size="small" onClick={() => handleOpenModal(ticket)}>
                         Editar
                       </Button>
                     ) : (
                       <Typography variant="body2" color="textSecondary">
-                        Los técnicos no pueden editar
+                        Sin permiso
                       </Typography>
                     )}
                   </TableCell>
@@ -125,7 +139,7 @@ const TablaTickets = () => {
                       </Button>
                     ) : (
                       <Typography variant="body2" color="textSecondary">
-                        Los técnicos no pueden eliminar
+                        Sin permiso
                       </Typography>
                     )}
                   </TableCell>
@@ -135,7 +149,20 @@ const TablaTickets = () => {
           </Table>
         </TableContainer>
 
-        {/* Modal de confirmación de eliminación */}
+        {/* Modal para agregar/editar ticket */}
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <Box sx={{ ...style, width: 400, p: 4 }}>
+            <Typography variant="h6" gutterBottom>
+              {selectedTicket ? 'Editar Ticket' : 'Agregar Ticket'}
+            </Typography>
+            <FormularioTicket
+              ticket={selectedTicket}
+              onSubmit={handleTicketSubmit}
+            />
+          </Box>
+        </Modal>
+
+        {/* Modal para confirmar eliminación */}
         <Modal open={openDeleteModal} onClose={handleCloseDeleteModal}>
           <Box sx={{ ...style, width: 400, p: 4 }}>
             <Typography variant="h6" gutterBottom>¿Deseas eliminar este ticket?</Typography>
@@ -146,9 +173,6 @@ const TablaTickets = () => {
             </Box>
           </Box>
         </Modal>
-
-        <ModalEditar open={openModalEditar} handleClose={handleCloseEdit} />
-        <ModalAgregarTicket open={openModalAgregarTicket} handleClose={handleCloseAgregar} />
       </Box>
     ) : (
       <Typography variant="h6">Cargando usuario...</Typography>
@@ -157,3 +181,4 @@ const TablaTickets = () => {
 };
 
 export default TablaTickets;
+
