@@ -116,41 +116,49 @@ const TablaTickets = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tickets.map((ticket, index) => (
-                <TableRow key={index}>
-                  <TableCell>{ticket.idTicket}</TableCell>
-                  <TableCell>{ticket.nombreCliente}</TableCell>
-                  <TableCell>{ticket.nombreUsuario}</TableCell>
-                  <TableCell>{ticket.descripcion}</TableCell>
-                  <TableCell>{ticket.fechaRecepcion}</TableCell>
-                  <TableCell>{ticket.estado}</TableCell>
-                  <TableCell>{ticket.prioridad}</TableCell>
-                  <TableCell>{ticket.canalRecepcion}</TableCell>
-                  <TableCell>{ticket.fechaResolucion || 'Pendiente'}</TableCell>
-                  <TableCell>
-                    {user.puesto === 'responsable' ? (
-                      <Button variant="contained" color="warning" size="small" onClick={() => handleOpenModal(ticket)}>
-                        Editar
-                      </Button>
-                    ) : (
-                      <Typography variant="body2" color="textSecondary">
-                        No Autorizado
-                      </Typography>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {user.puesto === 'responsable' ? (
-                      <Button variant="contained" color="error" size="small" onClick={() => handleOpenDeleteModal(ticket)}>
-                        Eliminar
-                      </Button>
-                    ) : (
-                      <Typography variant="body2" color="textSecondary">
-                        No Autorizado
-                      </Typography>
-                    )}
+              {Array.isArray(tickets) && tickets.length > 0 ? (
+                tickets.map((ticket, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{ticket.idTicket}</TableCell>
+                    <TableCell>{ticket.nombreCliente}</TableCell>
+                    <TableCell>{ticket.nombreUsuario}</TableCell>
+                    <TableCell>{ticket.descripcion}</TableCell>
+                    <TableCell>{ticket.fechaRecepcion}</TableCell>
+                    <TableCell>{ticket.estado}</TableCell>
+                    <TableCell>{ticket.prioridad}</TableCell>
+                    <TableCell>{ticket.canalRecepcion}</TableCell>
+                    <TableCell>{ticket.fechaResolucion || 'Pendiente'}</TableCell>
+                    <TableCell>
+                      {user.puesto === 'responsable' ? (
+                        <Button variant="contained" color="warning" size="small" onClick={() => handleOpenModal(ticket)}>
+                          Editar
+                        </Button>
+                      ) : (
+                        <Typography variant="body2" color="textSecondary">
+                          No Autorizado
+                        </Typography>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {user.puesto === 'responsable' ? (
+                        <Button variant="contained" color="error" size="small" onClick={() => handleOpenDeleteModal(ticket)}>
+                          Eliminar
+                        </Button>
+                      ) : (
+                        <Typography variant="body2" color="textSecondary">
+                          No Autorizado
+                        </Typography>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={11} align="center">
+                    No se encontraron tickets registrados
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
