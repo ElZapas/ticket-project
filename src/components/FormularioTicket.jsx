@@ -8,9 +8,9 @@ const FormularioTicket = ({ ticket, onSubmit }) => {
     nombreCliente: ticket?.nombreCliente || "",
     nombreUsuario: ticket?.nombreUsuario || "",
     descripcion: ticket?.descripcion || "",
-    estado: ticket?.estado || "Pendiente", // Valor por defecto para estado
+    estado: ticket?.estado || "Abierto", // Valor por defecto para estado
     prioridad: ticket?.prioridad || "Media", // Valor por defecto para prioridad
-    canalRecepcion: ticket?.canalRecepcion || "Email", // Valor por defecto para canalRecepcion
+    canalRecepcion: ticket?.canalRecepcion || "Correo", // Valor por defecto para canalRecepcion
   });
 
   const handleInputChange = (e) => {
@@ -84,9 +84,10 @@ const FormularioTicket = ({ ticket, onSubmit }) => {
         onChange={handleInputChange}
         required
       >
-        <MenuItem value="Pendiente">Pendiente</MenuItem>
-        <MenuItem value="Resuelto">Resuelto</MenuItem>
+        <MenuItem value="Abierto">Abierto</MenuItem>
         <MenuItem value="En Progreso">En Progreso</MenuItem>
+        <MenuItem value="Resuelto">Resuelto</MenuItem>
+        <MenuItem value="Cerrado">Cerrado</MenuItem>
       </Select>
       <Select
         label="Prioridad"
@@ -113,9 +114,7 @@ const FormularioTicket = ({ ticket, onSubmit }) => {
         onChange={handleInputChange}
         required
       >
-        <MenuItem value="Email">Email</MenuItem>
-        <MenuItem value="Llamada">Llamada</MenuItem>
-        <MenuItem value="Chat">Chat</MenuItem>
+        <MenuItem value="Correo">Correo</MenuItem>
         <MenuItem value="WhatsApp">WhatsApp</MenuItem>
       </Select>
       <Box display="flex" justifyContent="center" mt={3}>
