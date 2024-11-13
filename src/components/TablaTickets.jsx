@@ -6,9 +6,9 @@ import { useTicketAcciones } from '../hooks/useTicketAcciones'; // Importamos el
 import { useApp } from '../contexts/useApp';
 
 const TablaTickets = () => {
-  const { tickets, fetchTickets } = useTicketsFiltrados();
+  const { tickets, fetchTickets, setTickets } = useTicketsFiltrados();
   const { user } = useApp();
-  const { deleteTicket, updateTicket } = useTicketAcciones(); // Acciones para eliminar y editar
+  const { deleteTicket } = useTicketAcciones(); // Acciones para eliminar y editar
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -16,7 +16,7 @@ const TablaTickets = () => {
 
   useEffect(() => {
     fetchTickets(); // Cargar tickets al montar el componente
-  }, [fetchTickets]);
+  }, []);
 
   const style = {
     position: 'absolute',
@@ -48,25 +48,31 @@ const TablaTickets = () => {
     setOpenDeleteModal(false);
   };
 
-  const handleTicketSubmit = (ticketData) => {
-    if (selectedTicket) {
-      updateTicket(selectedTicket.idTicket, ticketData); // Usamos la acción de actualizar
+  const handleTicketSubmit = async ({ ticketRenderizado, isCreating }) => {
+    if (isCreating) {
+      setTickets((oldTickets) => ([...oldTickets, ticketRenderizado]))
     } else {
-      console.log('Agregar ticket:', ticketData);
+      console.log(ticketRenderizado)
+      setTickets((oldTickets) =>
+        oldTickets.map((ticket) => ticket.idTicket === ticketRenderizado.idTicket ? ticketRenderizado : ticket)
+      )
     }
     handleCloseModal();
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (selectedTicket) {
-      deleteTicket(selectedTicket.idTicket); // Usamos la acción de eliminar
+      await deleteTicket(selectedTicket.idTicket); // Eliminamos
+      setTickets((oldTickets) =>
+        oldTickets.filter((ticket) => ticket.idTicket !== selectedTicket.idTicket)
+      )
     }
     handleCloseDeleteModal();
   };
 
-  const filteredTickets = tickets.filter(ticket =>
+  /*const filteredTickets = tickets.filter(ticket =>
     ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  );*/
 
   return (
     user ? (
@@ -77,10 +83,10 @@ const TablaTickets = () => {
           </Typography>
 
           <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
-            <TextField 
-              label="Buscar Técnico" 
-              variant="outlined" 
-              size="small" 
+            <TextField
+              label="Buscar Técnico"
+              variant="outlined"
+              size="small"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -110,7 +116,7 @@ const TablaTickets = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredTickets.map((ticket, index) => (
+              {tickets.map((ticket, index) => (
                 <TableRow key={index}>
                   <TableCell>{ticket.idTicket}</TableCell>
                   <TableCell>{ticket.nombreCliente}</TableCell>
@@ -128,7 +134,7 @@ const TablaTickets = () => {
                       </Button>
                     ) : (
                       <Typography variant="body2" color="textSecondary">
-                        Sin permiso
+                        No Autorizado
                       </Typography>
                     )}
                   </TableCell>
@@ -139,7 +145,7 @@ const TablaTickets = () => {
                       </Button>
                     ) : (
                       <Typography variant="body2" color="textSecondary">
-                        Sin permiso
+                        No Autorizado
                       </Typography>
                     )}
                   </TableCell>

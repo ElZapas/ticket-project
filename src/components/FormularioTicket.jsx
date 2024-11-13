@@ -20,18 +20,21 @@ const FormularioTicket = ({ ticket, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    let ticketRenderizado;
+    let isCreating = false
     try {
       if (ticket) {
         // Si ya existe el ticket, actualizamos
-        const updatedTicket = await updateTicket(ticket.idTicket, formValues);
-        console.log("Ticket actualizado:", updatedTicket);
+        await updateTicket(ticket.idTicket, formValues);
+        ticketRenderizado = { ...ticket , ...formValues}
       } else {
         // Si es un nuevo ticket, lo agregamos
-        const newTicket = await addTicket(formValues);
-        console.log("Nuevo ticket agregado:", newTicket);
+        console.log(formValues)
+        const response = await addTicket(formValues);
+        ticketRenderizado = response.ticket
+        isCreating = true
       }
-      onSubmit(); // Llamar al callback para notificar que se completó la acción
+      onSubmit({ ticketRenderizado, isCreating }); // referenciando
     } catch (error) {
       console.error("Error en la acción del ticket:", error.message);
     }
@@ -40,7 +43,6 @@ const FormularioTicket = ({ ticket, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Typography variant="h6" gutterBottom>
-        {ticket ? "Editar Ticket" : "Crear Ticket"}
       </Typography>
       <TextField
         label="NombreCliente"
@@ -85,7 +87,7 @@ const FormularioTicket = ({ ticket, onSubmit }) => {
         required
       >
         <MenuItem value="Abierto">Abierto</MenuItem>
-        <MenuItem value="En Progreso">En Progreso</MenuItem>
+        <MenuItem value="En Proceso">En Proceso</MenuItem>
         <MenuItem value="Resuelto">Resuelto</MenuItem>
         <MenuItem value="Cerrado">Cerrado</MenuItem>
       </Select>

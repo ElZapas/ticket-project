@@ -31,7 +31,7 @@ export const useAuth = () => {
       console.log(data);
       return data;
     } else {
-      throw new Error(data.message || 'Error en la autenticación'); //Lanza una excepción 
+      throw new Error(data.message || 'Usuario y contraseña no validos'); //Lanza una excepción 
     }
   };
 

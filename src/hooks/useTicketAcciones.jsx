@@ -10,23 +10,12 @@ export const useTicketAcciones = () => {
     return token;
   };
 
-  const parseError = async (response) => {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Error desconocido en la API");
-  };
 
-  const fetchWithTimeout = async (url, options, timeout = 5000) => {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-    const response = await fetch(url, { ...options, signal: controller.signal });
-    clearTimeout(id);
-    return response;
-  };
 
   const addTicket = async (ticketData) => {
     try {
       const token = getValidToken();
-      const response = await fetchWithTimeout(`${environments.API_URL}/tickets`, {
+      const response = await fetch(`${environments.API_URL}/tickets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +24,7 @@ export const useTicketAcciones = () => {
         body: JSON.stringify(ticketData),
       });
 
-      if (!response.ok) await parseError(response);
+      if (!response.ok) throw Error('Error en la solicitud')
       return await response.json();
     } catch (error) {
       console.error("Error:", error.message);
@@ -46,7 +35,7 @@ export const useTicketAcciones = () => {
   const updateTicket = async (idTicket, updatedData) => {
     try {
       const token = getValidToken();
-      const response = await fetchWithTimeout(`${environments.API_URL}/tickets/${idTicket}`, {
+      const response = await fetch(`${environments.API_URL}/tickets/${idTicket}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +44,7 @@ export const useTicketAcciones = () => {
         body: JSON.stringify(updatedData),
       });
 
-      if (!response.ok) await parseError(response);
+      if (!response.ok) throw Error('Error en la solicitud')
       return await response.json();
     } catch (error) {
       console.error("Error:", error.message);
@@ -66,14 +55,14 @@ export const useTicketAcciones = () => {
   const deleteTicket = async (idTicket) => {
     try {
       const token = getValidToken();
-      const response = await fetchWithTimeout(`${environments.API_URL}/tickets/${idTicket}`, {
+      const response = await fetch(`${environments.API_URL}/tickets/${idTicket}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (!response.ok) await parseError(response);
+      if (!response.ok) throw Error('Error en la solicitud')
       return await response.json();
     } catch (error) {
       console.error("Error:", error.message);
