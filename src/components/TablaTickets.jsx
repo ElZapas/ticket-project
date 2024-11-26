@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,InputLabel , Button, TextField, Modal, Typography, Box, Select , MenuItem} from '@mui/material';
 import FormularioTicket from './FormularioTicket'; // Componente reutilizable para agregar/editar
-import { useTicketsFiltrados } from '../hooks/useTicketsFiltrados';
+import { useTickets } from '../hooks/useTickets';
 import { useTicketAcciones } from '../hooks/useTicketAcciones'; // Importamos el hook de acciones
 import { useApp } from '../contexts/useApp';
+import { EstadoTicket } from '../enums/estadoTicket';
+import { PrioridadTicket } from '../enums/prioridadTicket';
 
 const TablaTickets = () => {
-  const { tickets, fetchTickets, setTickets } = useTicketsFiltrados();
+  const { tickets, fetchTickets, setTickets, setFilters, filters} = useTickets();
   const { user } = useApp();
   const { deleteTicket } = useTicketAcciones(); // Acciones para eliminar y editar
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [estado, setEstado] = useState(EstadoTicket.ABIERTO);
+  const [prioridad, setPrioridad] = useState(PrioridadTicket.BAJA);
 
   useEffect(() => {
     fetchTickets(); // Cargar tickets al montar el componente
-  }, []);
+  }, [filters]);
 
   const style = {
     position: 'absolute',
@@ -74,20 +78,14 @@ const TablaTickets = () => {
     ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
   );*/
 
-
-  const [estado, setEstado] = useState("abierto");
-  const [prioridad, setPrioridad] = useState("baja");
-
   const handleChangeEstado = (event) => {
     setEstado(event.target.value);
   };
 
-
   const handleChangePrioridad = (event) => {
     setPrioridad(event.target.value);
+    setFilters({prioridad:event.target.value})
   };
-
-
 
   return (
     user ? (
@@ -124,8 +122,8 @@ const TablaTickets = () => {
                           onChange={handleChangeEstado}
                           label="Estado"
                         >
-                            <MenuItem value="abierto">Abierto</MenuItem>
-                            <MenuItem value="cerrado">Cerrado</MenuItem>
+                            <MenuItem value={EstadoTicket.ABIERTO}>Abierto</MenuItem>
+                            <MenuItem value={EstadoTicket.CERRADO}>Cerrado</MenuItem>
                       </Select>
                   </div>
                  
@@ -138,15 +136,12 @@ const TablaTickets = () => {
                         onChange={handleChangePrioridad}
                         label="prioridad"
                       >
-                          <MenuItem value="baja">Baja</MenuItem>
-                          <MenuItem value="media">Media</MenuItem>
-                          <MenuItem value="alta">Alta</MenuItem>
-                          <MenuItem value="critica">Critica</MenuItem>
+                          <MenuItem value={PrioridadTicket.BAJA}>Baja</MenuItem>
+                          <MenuItem value={PrioridadTicket.MEDIA}>Media</MenuItem>
+                          <MenuItem value={PrioridadTicket.ALTA}>Alta</MenuItem>
+                          <MenuItem value={PrioridadTicket.CRITICA}>Critica</MenuItem>
                     </Select>
-                  </div>
-                  
-
-
+                  </div>            
               </Box>
           </Box>
 
