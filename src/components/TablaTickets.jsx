@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Typography, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,InputLabel , Button, TextField, Modal, Typography, Box, Select , MenuItem} from '@mui/material';
 import FormularioTicket from './FormularioTicket'; // Componente reutilizable para agregar/editar
 import { useTicketsFiltrados } from '../hooks/useTicketsFiltrados';
 import { useTicketAcciones } from '../hooks/useTicketAcciones'; // Importamos el hook de acciones
@@ -74,6 +74,21 @@ const TablaTickets = () => {
     ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
   );*/
 
+
+  const [estado, setEstado] = useState("abierto");
+  const [prioridad, setPrioridad] = useState("baja");
+
+  const handleChangeEstado = (event) => {
+    setEstado(event.target.value);
+  };
+
+
+  const handleChangePrioridad = (event) => {
+    setPrioridad(event.target.value);
+  };
+
+
+
   return (
     user ? (
       <Box sx={{ marginLeft: 4, marginRight: 4 }}>
@@ -82,20 +97,59 @@ const TablaTickets = () => {
             Listado de Tickets
           </Typography>
 
-          <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
-            <TextField
-              label="Buscar Técnico"
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {user.puesto === 'responsable' && (
-              <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
-                Agregar
-              </Button>
-            )}
+        <Box display="flex" sx={{ justifyContent: 'space-between'}} >
+              <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
+                <TextField
+                  label="Buscar Técnico"
+                  variant="outlined"
+                  size="small"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {user.puesto === 'responsable' && (
+                  <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
+                    Agregar
+                  </Button>
+                )}
+                
+              </Box>
+              
+              <Box display="flex" sx={{ gap: 2}}>
+                  <div>
+                     <InputLabel id="estado-label">Estado</InputLabel>
+                      <Select
+                          labelId="estado-label"
+                          id="estado"
+                          value={estado}
+                          onChange={handleChangeEstado}
+                          label="Estado"
+                        >
+                            <MenuItem value="abierto">Abierto</MenuItem>
+                            <MenuItem value="cerrado">Cerrado</MenuItem>
+                      </Select>
+                  </div>
+                 
+                  <div>
+                    <InputLabel id="prioridad-label">Prioridad</InputLabel>
+                    <Select
+                        labelId="prioridad-label"
+                        id="prioridad"
+                        value={prioridad}
+                        onChange={handleChangePrioridad}
+                        label="prioridad"
+                      >
+                          <MenuItem value="baja">Baja</MenuItem>
+                          <MenuItem value="media">Media</MenuItem>
+                          <MenuItem value="alta">Alta</MenuItem>
+                          <MenuItem value="critica">Critica</MenuItem>
+                    </Select>
+                  </div>
+                  
+
+
+              </Box>
           </Box>
+
         </Box>
 
         <TableContainer component={Paper} sx={{ marginBottom: 4, padding: 2, boxShadow: 3, borderRadius: 2 }}>
