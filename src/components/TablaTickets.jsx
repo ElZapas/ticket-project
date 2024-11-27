@@ -74,11 +74,8 @@ const TablaTickets = () => {
     handleCloseDeleteModal();
   };
 
-  /*const filteredTickets = tickets.filter(ticket =>
-    ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
-  );*/
-
   const handleChangeEstado = (event) => {
+    setFilters({estado:event.target.value})
     setEstado(event.target.value);
   };
 

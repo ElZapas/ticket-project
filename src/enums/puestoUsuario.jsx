@@ -1,4 +1,4 @@
-export const PrioridadUsuario = {
+export const PuestoUsuario = {
     RESPONSABLE : 'responsable',
     TECNICO : 'tecnico'
 }
