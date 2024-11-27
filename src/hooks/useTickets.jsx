@@ -1,56 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
+import { useApp } from "../contexts/useApp"; // Accedemos al contexto global de usuario
 import { environments } from "../environments";
-import useToken from "./useToken"; // Asegúrate de importar correctamente el hook
+import useToken from "./useToken"; // Importar el hook useToken
 
-const useTickets = () => {
+export const useTickets = () => {
   const [tickets, setTickets] = useState([]);
+  const [filters, setFilters] = useState(undefined)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { getToken } = useToken(); // Obtén el token directamente desde el hook
+  const { user } = useApp(); // Obtener el usuario desde el contexto
+  const { getToken } = useToken(); // Obtener el token usando useToken
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        // Obtener el token desde el hook
-        const token = getToken();
-        if (!token) {
-          throw new Error("Token no disponible");
-        }
+  // Función para obtener tickets
+  const fetchTickets = useCallback(async () => {
+    if (!user) return; // Evitar solicitudes innecesarias
 
-        // Realizar la petición a la API
-        const response = await fetch(`${environments.API_URL}/tickets`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    try {
+      setLoading(true);
+      const token = getToken();
 
-        // Verificar si la respuesta es válida
-        if (response.status === 401) {
-          throw new Error("No autorizado. Verifica el token.");
-        }
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        // Parsear los datos
-        const data = await response.json();
-
-        // Actualizar el estado
-        setTickets(data);
-      } catch (error) {
-        console.error("Error al obtener tickets:", error.message);
-        setError(error.message);
-      } finally {
+      if (!token) {
+        setError("No se encontró el token");
         setLoading(false);
+        return;
       }
-    };
+      const queryParams = new URLSearchParams(filters)
+      const response = await fetch(`${environments.API_URL}/tickets?${queryParams.toString()}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    fetchTickets();
-  }, [getToken]); // Asegúrate de incluir getToken como dependencia
+      if (!response.ok) {
+        throw new Error("Error al obtener tickets");
+      }
 
-  return { tickets, loading, error };
+      const data = await response.json();
+      setTickets(Array.isArray(data) ? data : []);
+
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, getToken, filters]); // Solo cambiar si `user` o `getToken` cambian
+
+  return {tickets, loading, error, fetchTickets, setTickets, setFilters, filters};
 };
-
-export default useTickets;

@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Typography, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,InputLabel , Button, TextField, Modal, Typography, Box, Select , MenuItem} from '@mui/material';
 import FormularioTicket from './FormularioTicket'; // Componente reutilizable para agregar/editar
-import { useTicketsFiltrados } from '../hooks/useTicketsFiltrados';
+import { useTickets } from '../hooks/useTickets';
 import { useTicketAcciones } from '../hooks/useTicketAcciones'; // Importamos el hook de acciones
 import { useApp } from '../contexts/useApp';
+import { EstadoTicket } from '../enums/estadoTicket';
+import { PrioridadTicket } from '../enums/prioridadTicket';
 
 const TablaTickets = () => {
-  const { tickets, fetchTickets, setTickets } = useTicketsFiltrados();
+  const { tickets, fetchTickets, setTickets, setFilters, filters} = useTickets();
   const { user } = useApp();
   const { deleteTicket } = useTicketAcciones(); // Acciones para eliminar y editar
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [estado, setEstado] = useState(EstadoTicket.ABIERTO);
+  const [prioridad, setPrioridad] = useState(PrioridadTicket.BAJA);
 
   useEffect(() => {
     fetchTickets(); // Cargar tickets al montar el componente
-  }, []);
+  }, [filters]);
 
   const style = {
     position: 'absolute',
@@ -70,9 +74,15 @@ const TablaTickets = () => {
     handleCloseDeleteModal();
   };
 
-  /*const filteredTickets = tickets.filter(ticket =>
-    ticket.nombreUsuario.toLowerCase().includes(searchTerm.toLowerCase())
-  );*/
+  const handleChangeEstado = (event) => {
+    setFilters({estado:event.target.value})
+    setEstado(event.target.value);
+  };
+
+  const handleChangePrioridad = (event) => {
+    setPrioridad(event.target.value);
+    setFilters({prioridad:event.target.value})
+  };
 
   return (
     user ? (
@@ -82,20 +92,56 @@ const TablaTickets = () => {
             Listado de Tickets
           </Typography>
 
-          <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
-            <TextField
-              label="Buscar Técnico"
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {user.puesto === 'responsable' && (
-              <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
-                Agregar
-              </Button>
-            )}
+        <Box display="flex" sx={{ justifyContent: 'space-between'}} >
+              <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
+                <TextField
+                  label="Buscar Técnico"
+                  variant="outlined"
+                  size="small"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {user.puesto === 'responsable' && (
+                  <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
+                    Agregar
+                  </Button>
+                )}
+                
+              </Box>
+              
+              <Box display="flex" sx={{ gap: 2}}>
+                  <div>
+                     <InputLabel id="estado-label">Estado</InputLabel>
+                      <Select
+                          labelId="estado-label"
+                          id="estado"
+                          value={estado}
+                          onChange={handleChangeEstado}
+                          label="Estado"
+                        >
+                            <MenuItem value={EstadoTicket.ABIERTO}>Abierto</MenuItem>
+                            <MenuItem value={EstadoTicket.CERRADO}>Cerrado</MenuItem>
+                      </Select>
+                  </div>
+                 
+                  <div>
+                    <InputLabel id="prioridad-label">Prioridad</InputLabel>
+                    <Select
+                        labelId="prioridad-label"
+                        id="prioridad"
+                        value={prioridad}
+                        onChange={handleChangePrioridad}
+                        label="prioridad"
+                      >
+                          <MenuItem value={PrioridadTicket.BAJA}>Baja</MenuItem>
+                          <MenuItem value={PrioridadTicket.MEDIA}>Media</MenuItem>
+                          <MenuItem value={PrioridadTicket.ALTA}>Alta</MenuItem>
+                          <MenuItem value={PrioridadTicket.CRITICA}>Critica</MenuItem>
+                    </Select>
+                  </div>            
+              </Box>
           </Box>
+
         </Box>
 
         <TableContainer component={Paper} sx={{ marginBottom: 4, padding: 2, boxShadow: 3, borderRadius: 2 }}>
