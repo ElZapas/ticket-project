@@ -43,7 +43,6 @@ const TablaTecnicos = ({ handleEdit, token }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: '16px' }}>ID Técnico</TableCell>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '16px' }}>Nombre</TableCell>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '16px' }}>Correo</TableCell>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '16px' }}>Editar</TableCell>
@@ -52,7 +51,6 @@ const TablaTecnicos = ({ handleEdit, token }) => {
           <TableBody>
             {tecnicos.map((tecnico, index) => (
               <TableRow key={index}>
-                <TableCell>{tecnico.idUsuario}</TableCell>
                 <TableCell>{tecnico.nombreUsuario}</TableCell>
                 <TableCell>{tecnico.email}</TableCell>
                 <TableCell>
