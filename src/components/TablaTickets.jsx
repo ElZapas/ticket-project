@@ -115,66 +115,72 @@ const TablaTickets = () => {
           </Typography>
 
           <Box display="flex" sx={{ justifyContent: 'space-between' }} >
-            <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
-              <TextField
-                label="Buscar Técnico"
-                variant="outlined"
-                size="small"
-                value={searchTerm}
-                onChange={handleSearchTermChange} // Cambiar aquí
-              />
-              {user.puesto === 'responsable' && (
-                <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
-                  Agregar
-                </Button>
-              )}
+  <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
+    {user.puesto === 'responsable' && (
+      <>
+        <TextField
+          label="Buscar Técnico"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+        />
+        <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
+          Agregar
+        </Button>
+      </>
+    )}
+  </Box>
 
-            </Box>
+  {user.puesto === 'responsable' && (
+    <Box display="flex" sx={{ gap: 2 }}>
+      <div>
+        <InputLabel id="estado-label">Estado</InputLabel>
+        <Select
+          labelId="estado-label"
+          id="estado"
+          value={estado}
+          onChange={handleChangeEstado}
+          label="Estado"
+        >
+          <MenuItem value={EstadoTicket.ABIERTO}>Abierto</MenuItem>
+          <MenuItem value={EstadoTicket.CERRADO}>Cerrado</MenuItem>
+        </Select>
+      </div>
 
-            <Box display="flex" sx={{ gap: 2 }}>
-              <div>
-                <InputLabel id="estado-label">Estado</InputLabel>
-                <Select
-                  labelId="estado-label"
-                  id="estado"
-                  value={estado}
-                  onChange={handleChangeEstado}
-                  label="Estado"
-                >
-                  <MenuItem value={EstadoTicket.ABIERTO}>Abierto</MenuItem>
-                  <MenuItem value={EstadoTicket.CERRADO}>Cerrado</MenuItem>
-                </Select>
-              </div>
+      <div>
+        <InputLabel id="prioridad-label">Prioridad</InputLabel>
+        <Select
+          labelId="prioridad-label"
+          id="prioridad"
+          value={prioridad}
+          onChange={handleChangePrioridad}
+          label="prioridad"
+        >
+          <MenuItem value={PrioridadTicket.BAJA}>Baja</MenuItem>
+          <MenuItem value={PrioridadTicket.MEDIA}>Media</MenuItem>
+          <MenuItem value={PrioridadTicket.ALTA}>Alta</MenuItem>
+          <MenuItem value={PrioridadTicket.CRITICA}>Critica</MenuItem>
+        </Select>
+      </div>
 
-              <div>
-                <InputLabel id="prioridad-label">Prioridad</InputLabel>
-                <Select
-                  labelId="prioridad-label"
-                  id="prioridad"
-                  value={prioridad}
-                  onChange={handleChangePrioridad}
-                  label="prioridad"
-                >
-                  <MenuItem value={PrioridadTicket.BAJA}>Baja</MenuItem>
-                  <MenuItem value={PrioridadTicket.MEDIA}>Media</MenuItem>
-                  <MenuItem value={PrioridadTicket.ALTA}>Alta</MenuItem>
-                  <MenuItem value={PrioridadTicket.CRITICA}>Critica</MenuItem>
-                </Select>
-              </div>
-              {/* Botón para resetear filtros */}
-              <Button onClick={handleResetFilters} style={{
-                backgroundColor: "#1976d2", // Color de fondo
-                color: "#fff", // Color de texto
-                border: "none", // Sin bordes
-                borderRadius: "4px", // Bordes ligeramente redondeados
-                padding: "8px 16px", // Tamaño compacto
-                cursor: "pointer", // Cambia a mano al pasar por encima
-                fontSize: "14px", // Tamaño del texto
-              }}>
-                Resetear Filtros
-              </Button>
-            </Box>
-          </Box>
+      <Button 
+        onClick={handleResetFilters} 
+        style={{
+          backgroundColor: "#1976d2",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          padding: "8px 16px",
+          cursor: "pointer",
+          fontSize: "14px",
+        }}
+      >
+        Resetear Filtros
+      </Button>
+    </Box>
+  )}
+</Box>
 
         </Box>
 
