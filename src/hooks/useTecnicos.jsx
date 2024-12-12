@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { environments } from '../environments';
 import useToken from './useToken';
 
-const useTecnicos = () => {
+export const useTecnicos = () => {
   const [tecnicos, setTecnicos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
