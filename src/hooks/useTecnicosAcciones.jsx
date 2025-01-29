@@ -1,38 +1,39 @@
 import { environments } from "../environments";
-import useToken from "../hooks/useToken";
+import useToken from "./useToken";
 
 export const useTecnicosAcciones = () => {
   const { getToken } = useToken();
 
-  const getValidToken = () => {
+  const handleRequest = async (url, method, body = null) => {
     const token = getToken();
-    if (!token) throw new Error("No se encontró el token");
-    return token;
-  };
+    if (!token) throw new Error('No autenticado');
 
-  const deshabilitarTecnico = async (idTecnico) => {
-    try {
-      const token = getValidToken();
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
 
-      // Log del ID y el token antes de la solicitud
-      console.log("ID Técnico:", idTecnico);
-      console.log("Token:", token);
+    console.log(body)
 
-      const response = await fetch(`${environments.API_URL}/users/${idTecnico}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const response = await fetch(`${environments.API_URL}${url}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : null
+    });
 
-      if (!response.ok) throw Error("Error en la solicitud");
-      return await response.json();
-    } catch (error) {
-      console.error("Error:", error.message);
-      console.log(idTecnico);
-      throw error;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Error en la solicitud');
     }
+
+    return await response.json();
   };
 
-  return { deshabilitarTecnico };
+  const deshabilitarTecnico = (id) => handleRequest(`/users/${id}`, 'DELETE');
+  
+  const editarTecnico = (id, data) => handleRequest(`/users/${id}`, 'PUT', data);
+  
+  const agregarTecnico = (data) => handleRequest('/users', 'POST', data);
+
+  return { deshabilitarTecnico, editarTecnico, agregarTecnico };
 };

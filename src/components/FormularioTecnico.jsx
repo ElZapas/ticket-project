@@ -1,15 +1,11 @@
-
-import React from "react";
-import { TextField, Select, MenuItem, Button, Box, Typography } from "@mui/material";
-import { useTecnicosAcciones } from "../hooks/useTecnicosAcciones";
+import { TextField, Button, Box, Typography } from "@mui/material";
+import { useState } from "react";
 
 const FormularioTecnico = ({ tecnico, onSubmit }) => {
-  const { addTecnico, updateTecnico } = useTecnicosAcciones();
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = useState({
     nombreUsuario: tecnico?.nombreUsuario || "",
     email: tecnico?.email || "",
     password: tecnico?.password || "",
-    rol: tecnico?.rol || "Tecnico", // Valor por defecto para rol
   });
 
   const handleInputChange = (e) => {
@@ -19,23 +15,7 @@ const FormularioTecnico = ({ tecnico, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let tecnicoRenderizado;
-    let isCreating = false
-    try {
-      if (tecnico) {
-        // Si ya existe el técnico, actualizamos
-        await updateTecnico(tecnico.idTecnico, formValues);
-        tecnicoRenderizado = { ...tecnico, ...formValues }
-      } else {
-        // Si es un nuevo técnico, lo agregamos
-        const response = await addTecnico(formValues);
-        tecnicoRenderizado = response.tecnico
-        isCreating = true
-      }
-      onSubmit({ tecnicoRenderizado, isCreating }); // referenciando
-    } catch (error) {
-      console.error("Error en la acción del técnico:", error.message);
-    }
+    onSubmit(formValues)
   };
 
   return (
@@ -62,6 +42,7 @@ const FormularioTecnico = ({ tecnico, onSubmit }) => {
         onChange={handleInputChange}
         required
       />
+      {!tecnico && 
       <TextField
         label="Contraseña"
         fullWidth
@@ -71,20 +52,8 @@ const FormularioTecnico = ({ tecnico, onSubmit }) => {
         value={formValues.password}
         onChange={handleInputChange}
         required
-      />
-      <Select
-        label="Rol"
-        fullWidth
-        variant="outlined"
-        margin="dense"
-        name="rol"
-        value={formValues.rol}
-        onChange={handleInputChange}
-        required
-      >
-        <MenuItem value="Tecnico">Tecnico</MenuItem>
-        <MenuItem value="Administrador">Administrador</MenuItem>
-      </Select>
+      />}
+    
       <Box display="flex" justifyContent="center" mt={3}>
         <Button variant="contained" color="primary" type="submit">
           {tecnico ? "Actualizar" : "Agregar"}
