@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,InputLabel , Button, TextField, Modal, Typography, Box, Select , MenuItem} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, InputLabel, Button, TextField, Modal, Typography, Box, Select, MenuItem } from '@mui/material';
 import FormularioTicket from './FormularioTicket'; // Componente reutilizable para agregar/editar
 import { useTickets } from '../hooks/useTickets';
 import { useTicketAcciones } from '../hooks/useTicketAcciones'; // Importamos el hook de acciones
 import { useApp } from '../contexts/useApp';
 import { EstadoTicket } from '../enums/estadoTicket';
 import { PrioridadTicket } from '../enums/prioridadTicket';
+import debounce from 'just-debounce-it';
+
 
 const TablaTickets = () => {
-  const { tickets, fetchTickets, setTickets, setFilters, filters} = useTickets();
+  const { tickets, fetchTickets, setTickets, setFilters, filters } = useTickets();
   const { user } = useApp();
   const { deleteTicket } = useTicketAcciones(); // Acciones para eliminar y editar
   const [openModal, setOpenModal] = useState(false);
@@ -17,6 +19,14 @@ const TablaTickets = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [estado, setEstado] = useState(EstadoTicket.ABIERTO);
   const [prioridad, setPrioridad] = useState(PrioridadTicket.BAJA);
+
+  const debouncedFilter = debounce((searchValue) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      tecnico: searchValue, // Agregamos el término de búsqueda para el técnico
+    }));
+  }, 1500);
+  
 
   useEffect(() => {
     fetchTickets(); // Cargar tickets al montar el componente
@@ -75,13 +85,25 @@ const TablaTickets = () => {
   };
 
   const handleChangeEstado = (event) => {
-    setFilters({estado:event.target.value})
+    setFilters({ estado: event.target.value })
     setEstado(event.target.value);
   };
 
   const handleChangePrioridad = (event) => {
     setPrioridad(event.target.value);
-    setFilters({prioridad:event.target.value})
+    setFilters({ prioridad: event.target.value })
+  };
+
+  const handleResetFilters = () => {
+    setFilters({}); // Resetea los filtros en el hook
+    setEstado(EstadoTicket.ABIERTO); // Valor inicial del estado
+    setPrioridad(PrioridadTicket.BAJA); // Valor inicial de la prioridad
+  };
+
+  const handleSearchTermChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value); // Actualiza el valor mostrado en el campo de texto
+    debouncedFilter(value); // Ejecuta el filtro con debounce
   };
 
   return (
@@ -92,55 +114,73 @@ const TablaTickets = () => {
             Listado de Tickets
           </Typography>
 
-        <Box display="flex" sx={{ justifyContent: 'space-between'}} >
-              <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
-                <TextField
-                  label="Buscar Técnico"
-                  variant="outlined"
-                  size="small"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                {user.puesto === 'responsable' && (
-                  <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
-                    Agregar
-                  </Button>
-                )}
-                
-              </Box>
-              
-              <Box display="flex" sx={{ gap: 2}}>
-                  <div>
-                     <InputLabel id="estado-label">Estado</InputLabel>
-                      <Select
-                          labelId="estado-label"
-                          id="estado"
-                          value={estado}
-                          onChange={handleChangeEstado}
-                          label="Estado"
-                        >
-                            <MenuItem value={EstadoTicket.ABIERTO}>Abierto</MenuItem>
-                            <MenuItem value={EstadoTicket.CERRADO}>Cerrado</MenuItem>
-                      </Select>
-                  </div>
-                 
-                  <div>
-                    <InputLabel id="prioridad-label">Prioridad</InputLabel>
-                    <Select
-                        labelId="prioridad-label"
-                        id="prioridad"
-                        value={prioridad}
-                        onChange={handleChangePrioridad}
-                        label="prioridad"
-                      >
-                          <MenuItem value={PrioridadTicket.BAJA}>Baja</MenuItem>
-                          <MenuItem value={PrioridadTicket.MEDIA}>Media</MenuItem>
-                          <MenuItem value={PrioridadTicket.ALTA}>Alta</MenuItem>
-                          <MenuItem value={PrioridadTicket.CRITICA}>Critica</MenuItem>
-                    </Select>
-                  </div>            
-              </Box>
-          </Box>
+          <Box display="flex" sx={{ justifyContent: 'space-between' }} >
+  <Box display="flex" alignItems="center" gap={2} sx={{ marginTop: 2 }}>
+    {user.puesto === 'responsable' && (
+      <>
+        <TextField
+          label="Buscar Técnico"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+        />
+        <Button variant="contained" color="primary" onClick={() => handleOpenModal()}>
+          Agregar
+        </Button>
+      </>
+    )}
+  </Box>
+
+  {user.puesto === 'responsable' && (
+    <Box display="flex" sx={{ gap: 2 }}>
+      <div>
+        <InputLabel id="estado-label">Estado</InputLabel>
+        <Select
+          labelId="estado-label"
+          id="estado"
+          value={estado}
+          onChange={handleChangeEstado}
+          label="Estado"
+        >
+          <MenuItem value={EstadoTicket.ABIERTO}>Abierto</MenuItem>
+          <MenuItem value={EstadoTicket.CERRADO}>Cerrado</MenuItem>
+        </Select>
+      </div>
+
+      <div>
+        <InputLabel id="prioridad-label">Prioridad</InputLabel>
+        <Select
+          labelId="prioridad-label"
+          id="prioridad"
+          value={prioridad}
+          onChange={handleChangePrioridad}
+          label="prioridad"
+        >
+          <MenuItem value={PrioridadTicket.BAJA}>Baja</MenuItem>
+          <MenuItem value={PrioridadTicket.MEDIA}>Media</MenuItem>
+          <MenuItem value={PrioridadTicket.ALTA}>Alta</MenuItem>
+          <MenuItem value={PrioridadTicket.CRITICA}>Critica</MenuItem>
+        </Select>
+      </div>
+
+      <Button 
+        onClick={handleResetFilters} 
+        style={{
+          backgroundColor: "#1976d2",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          padding: "8px 16px",
+          cursor: "pointer",
+          fontSize: "14px",
+        }}
+      >
+        Resetear Filtros
+      </Button>
+    </Box>
+  )}
+</Box>
 
         </Box>
 
@@ -241,4 +281,3 @@ const TablaTickets = () => {
 };
 
 export default TablaTickets;
-
